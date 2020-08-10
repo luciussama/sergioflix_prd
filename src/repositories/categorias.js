@@ -11,6 +11,18 @@ function getTodasCategoriasComVideos(){
     })
 }
 
+function getTodasCategorias(){
+    return fetch(url)
+    .then(async (retorno) => {
+        if(retorno.ok){
+            return await retorno.json();
+        } else{
+            throw new Error(retorno.error.message);
+        }
+    })
+}
+
 export default{
     getTodasCategoriasComVideos,
+    getTodasCategorias,
 }

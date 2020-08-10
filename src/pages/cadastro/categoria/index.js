@@ -20,8 +20,9 @@ const {handleChange, values, clearForm} = useForm(valoresIniciais);
 
 
   useEffect(() => {
-    if(window.location.href.includes('localhost')) {
-      const URL = 'http://localhost:8080/categorias'; 
+    const URL = window.location.href.includes('localhost')
+      ? 'http://localhost:8080/categorias'
+      : 'https://serfioflix-prd.herokuapp.com/categorias'; 
       fetch(URL)
        .then(async (retorno) =>{
         if(retorno.ok) {
@@ -31,8 +32,9 @@ const {handleChange, values, clearForm} = useForm(valoresIniciais);
         }
         throw new Error('Não foi possível pegar os dados');
        })
-    }    
-  }, []);
+      }, 
+    []
+  );
 
   return (
     <PageDefault>

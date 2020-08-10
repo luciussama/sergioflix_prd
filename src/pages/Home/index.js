@@ -1,9 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import loading from '../../assets/img/download.jpg'
-import Menu from '../../components/Menu';
-import dadosIniciais from '../../data/dados_iniciais.json';
 import Carousel from '../../components/Carousel';
-import Footer from '../../components/Footer';
 import categoriasRepository from '../../repositories/categorias.js';
 import PageDefault from '../../components/PageDefault';
 import BannerMain from './../../components/BannerMain/index';
@@ -31,8 +28,8 @@ function Home() {
           return(
             <div key={categoria.id}>
               <BannerMain
-                videoTitle={dadosIniciais[0].videos[0].titulo}
-                url={dadosIniciais[0].videos[0].url}
+                videoTitle={dadosIniciais[3].videos[1].titulo}
+                url={dadosIniciais[3].videos[1].url}
                 videoDescription="O que é Front-end? Trabalhando na área os termos HTML, CSS e JavaScript fazem parte da rotina das desenvolvedoras e desenvolvedores. Mas o que eles fazem, afinal? Descubra com a Vanessa!"
               />
               
