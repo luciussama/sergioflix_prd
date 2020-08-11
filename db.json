@@ -49,6 +49,12 @@
         "text": "Cursos de Data Science na Alura",
         "url": "https://www.alura.com.br/cursos-online-mobile"
       }
+    },
+    {
+      "titulo": "Música",
+      "descricao": "Músicas prediletas",
+      "color": "#8e0101",
+      "id": 7
     }
   ],
   "videos": [

@@ -2,7 +2,9 @@ import config from '../config';
 
 // Esse "embed" está fazendo via Json a ligação de vídeos por categorias através da chave do banco de dados
 const url = `${config.urlRetorno}/videos`;
+
 function create(video){
+
     return fetch(`${url}?_embed=videos`, {
         method: 'POST',
         headers: {

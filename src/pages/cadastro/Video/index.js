@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, Redirect } from 'react-router-dom';
 import PageDefault from '../../../components/PageDefault';
 import useForm from './../../../hooks/useForm';
 import FormField from './../../../components/FormField/index';
@@ -7,6 +7,7 @@ import Button from './../../../components/Button/index';
 import videosRepository from '../../../repositories/videos';
 import categoriasRepository from '../../../repositories/categorias';
 import Popup from 'react-popup';
+import CadastroCategoria from './../categoria/index';
 
 function CadastroVideo() {
   
@@ -33,7 +34,7 @@ function CadastroVideo() {
     });
   }, []);
 
- 
+    const RedirectToCategoria = () => ( <Redirect to={CadastroCategoria} />);
   return (
     <PageDefault>
       <h1>Cadastro de Video</h1>
@@ -44,23 +45,23 @@ function CadastroVideo() {
         const categoriaEscolhida = categorias.find((categoria) => {
           return categoria.titulo === values.categoria;
         });
-        
         if(categoriaEscolhida === undefined){
-          Popup.alert('Categoria digitada não está cadastrada');
+          alert('Categoria não cadastra. Por favor, cadastre uma categoria.');
+          RedirectToCategoria();
+        } else{
+          videosRepository.create({
+            titulo: values.titulo,
+            url: values.url,
+            categoriaId: categoriaEscolhida.id,
+          })
+          .then((retorno) => {
+            if(retorno.ok)
+            history.push('/');
+          });
           
         }
         
-        videosRepository.create({
-          titulo: values.titulo,
-          url: values.url,
-          categoriaId: categoriaEscolhida.id,
-        })
-        .then((retorno) => {
-          if(retorno.ok)
-          history.push('/');
-        });
       }}>
-
       <FormField
           label="Título do vídeo"
           type="text"

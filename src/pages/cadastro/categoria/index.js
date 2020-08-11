@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import PageDefault from '../../../components/PageDefault';
 import FormField from '../../../components/FormField';
 import Button from './../../../components/Button/index';
 import useForm from '../../../hooks/useForm';
+import categoriasRepository from '../../../repositories/categorias';
 
 
 
@@ -14,27 +15,36 @@ function CadastroCategoria() {
     cor: '',
   }
   const [categorias, setCategorias] = useState([]);
+  const historico = useHistory();
   
 // o Javascript faz o binding com os valores de "useForm" através do retorno
 const {handleChange, values, clearForm} = useForm(valoresIniciais);
 
-
+  // Especial para capturar a lista de categorias
   useEffect(() => {
-    const URL = window.location.href.includes('localhost')
-      ? 'http://localhost:8080/categorias'
-      : 'https://serfioflix-prd.herokuapp.com/categorias'; 
-      fetch(URL)
-       .then(async (retorno) =>{
-        if(retorno.ok) {
-          const resposta = await retorno.json();
-          setCategorias(resposta);
-          return; 
-        }
-        throw new Error('Não foi possível pegar os dados');
-       })
-      }, 
-    []
-  );
+    categoriasRepository
+    .getTodasCategorias()
+    .then((retornoCategorias) => {
+      setCategorias(retornoCategorias);
+    });
+  }, []);
+  
+  // useEffect(() => {
+  //   const URL = window.location.href.includes('localhost')
+  //     ? 'http://localhost:8080/categorias'
+  //     : 'https://serfioflix-prd.herokuapp.com/categorias'; 
+  //     fetch(URL)
+  //      .then(async (retorno) =>{
+  //       if(retorno.ok) {
+  //         const resposta = await retorno.json();
+  //         setCategorias(resposta);
+  //         return; 
+  //       }
+  //       throw new Error('Não foi possível pegar os dados');
+  //      })
+  //     }, 
+  //   []
+  // );
 
   return (
     <PageDefault>
@@ -43,15 +53,28 @@ const {handleChange, values, clearForm} = useForm(valoresIniciais);
         {values.nome}
       </h1>
 
+      {/* videosRepository.create({
+            titulo: values.titulo,
+            url: values.url,
+            categoriaId: categoriaEscolhida.id,
+          })
+          .then((retorno) => {
+            if(retorno.ok)
+            history.push('/');
+          });
+           */}
       <form onSubmit={function handleSubmit(infosDoEvento) {
           infosDoEvento.preventDefault();
-
-          setCategorias([
-            ...categorias,
-            values
-          ]);
-
-          clearForm();
+          categoriasRepository.create({
+           titulo: values.titulo,
+           descricao: values.descricao,
+           color: values.cor,
+         })
+         .then((retorno) => {
+           if(retorno.ok){
+            historico.push('/');
+           } 
+         })
       }}>
 
         <FormField
@@ -64,7 +87,7 @@ const {handleChange, values, clearForm} = useForm(valoresIniciais);
 
         <FormField
           label="Descrição:"
-          type="????"
+          type="textarea"
           name="descricao"
           value={values.descricao}
           onChange={handleChange}
@@ -82,17 +105,7 @@ const {handleChange, values, clearForm} = useForm(valoresIniciais);
           Cadastrar
         </Button>
       </form>
-
-      <ul>
-        {categorias.map((categoria, indice) => {
-          return (
-            <li key={`${categoria}${indice}`}>
-              {categoria.titulo}
-            </li>
-          )
-        })}
-      </ul>
-
+     
       <Link to="/">
         Ir para home
       </Link>
